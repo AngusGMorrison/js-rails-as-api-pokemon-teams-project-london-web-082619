@@ -1,4 +1,3 @@
-
 const baseUrl = "http://localhost:3000";
 const trainersUrl = `${baseUrl}/trainers`;
 const pokemonsUrl = `${baseUrl}/pokemons`;
@@ -59,12 +58,19 @@ var module = (function() {
   }
 
   function createNewPokemon(event) {
-    const trainerId = event.target.dataset.trainerId;
-    const requestConfig = createNewPokemonRequestConfig(trainerId);
-    const pokemonListItem = fetch(pokemonsUrl, requestConfig)
-      .then(response => response.json())
-      .then(json => renderNewPokemon(json.data, trainerId))
-      .catch(console.log);
+    const currentTeam = event.target.nextSibling.children;
+    if (!teamIsFull(currentTeam)) {
+      const trainerId = event.target.dataset.trainerId;
+      const requestConfig = createNewPokemonRequestConfig(trainerId);
+      const pokemonListItem = fetch(pokemonsUrl, requestConfig)
+        .then(response => response.json())
+        .then(json => renderNewPokemon(json.data, trainerId))
+        .catch(console.log);
+    }
+  }
+
+  function teamIsFull(team) {
+    return team.length >= 6;
   }
 
   function renderNewPokemon(pokemon, trainerId) {
